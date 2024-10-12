@@ -35,8 +35,7 @@ public interface Tree<E> {
    * @return the element replaced
    * @throws InvalidPositionException if position is null or is not referring to a treeNode
    */
-  public E replace(Position<E> position, E elem)
-          throws InvalidPositionException;
+  public E replace(Position<E> position, E elem) throws InvalidPositionException;
 
   /**
    * @return the position of root of the tree
@@ -51,16 +50,14 @@ public interface Tree<E> {
    * @throws InvalidPositionException   if position is null or is not referring to a treeNode
    * @throws BoundaryViolationException if there is no parent
    */
-  public Position<E> parent(Position<E> position)
-          throws InvalidPositionException, BoundaryViolationException;
+  public Position<E> parent(Position<E> position) throws InvalidPositionException, BoundaryViolationException;
 
   /**
    * @param position the position of the tree node to calculate the children tree nodes
    * @return an iterable collection of the children of a given node.
    * @throws InvalidPositionException if position is null or is not referring to a treeNode
    */
-  public Iterable<Position<E>> children(Position<E> position)
-          throws InvalidPositionException;
+  public Iterable<Position<E>> children(Position<E> position) throws InvalidPositionException;
 
   /** Returns whether a given node is internal. */
   /**
@@ -68,16 +65,15 @@ public interface Tree<E> {
    * @return true if the treenode is a internal node
    * @throws InvalidPositionException if position is null or is not referring to a treeNode
    */
-  public boolean isInternal(Position<E> position)
-          throws InvalidPositionException;
+  public boolean isInternal(Position<E> position) throws InvalidPositionException;
 
   /**
    * @param position of the tree node
    * @return true if the treenode is a external node
    * @throws InvalidPositionException if position is null or is not referring to a treeNode
    */
-  public boolean isExternal(Position<E> position)
-          throws InvalidPositionException;
+  public boolean isExternal(Position<E> position) throws InvalidPositionException;
+
   /** Returns whether a given node is the root of the tree. */
   /**
    * @param position of the tree node

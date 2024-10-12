@@ -24,7 +24,13 @@ public class TADTreeMain {
         myTree.insert(posAve, "Papagaio");
         Position<String> posAguia = myTree.insert(posAve, "Aguia");
         myTree.insert(posAguia, "Aguia Real");
-        System.out.println("TREE " + myTree);
-        System.out.println(myTree);
+        System.out.println(myTree.toString());
+
+        System.out.println("Pre-order: " + myTree.toStringPreOrder());
+        System.out.println("Post-order: " + myTree.toStringPosOrder());
+
+        System.out.println(myTree.find(posAguia.element()));
+
+
     }
 }

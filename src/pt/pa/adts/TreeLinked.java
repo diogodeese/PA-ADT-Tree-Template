@@ -71,12 +71,16 @@ public class TreeLinked<E> implements Tree<E> {
 
     @Override
     public boolean isExternal(Position<E> position) throws InvalidPositionException {
-        throw new UnsupportedOperationException();
+        TreeNode node = checkPosition(position);
+
+        return node.children.size() == 0;
     }
 
     @Override
     public boolean isRoot(Position<E> position) throws InvalidPositionException {
-        throw new UnsupportedOperationException();
+        TreeNode node = checkPosition(position);
+
+        return node.parent == null;
     }
 
     public Position<E> insert(Position<E> parent, E elem) throws BoundaryViolationException, InvalidPositionException {
@@ -112,9 +116,23 @@ public class TreeLinked<E> implements Tree<E> {
 
     @Override
     public E remove(Position<E> position) throws InvalidPositionException {
-        throw new UnsupportedOperationException();
-    }
+        TreeNode nodeToRemove = checkPosition(position);
 
+        if (!nodeToRemove.children.isEmpty()) {
+            throw new UnsupportedOperationException("Cannot remove a node with children.");
+        }
+
+        TreeNode parentNode = nodeToRemove.parent;
+
+        if (parentNode != null) {
+            parentNode.children.remove(nodeToRemove);
+        }
+
+        E removedElement = nodeToRemove.element;
+        nodeToRemove.element = null;
+
+        return removedElement;
+    }
 
     // auxiliary method to check if Position is valid and cast to a treeNode
     private TreeNode checkPosition(Position<E> position) throws InvalidPositionException {
@@ -124,12 +142,71 @@ public class TreeLinked<E> implements Tree<E> {
 
         try {
             TreeNode treeNode = (TreeNode) position;
+
+            if(!belongs(this, treeNode)) throw new BoundaryViolationException("Tree node doesn't belong to this tree");
+
             if (treeNode.children == null) {
                 throw new InvalidPositionException("The position is invalid");
             }
             return treeNode;
         } catch (ClassCastException e) {
             throw new InvalidPositionException();
+        }
+    }
+
+    public boolean exists(E elem) {
+        if(isEmpty()) return false;
+        return exists(root, elem);
+    }
+
+    private boolean exists(Position<E> pos, E elem) {
+        boolean res = false;
+        if(pos.element().equals(elem)) return true;
+        for(Position<E> w: children(pos)) {
+            res = exists(w, elem);
+        }
+
+        return res;
+    }
+
+    private boolean belongs(TreeLinked<E> tree, TreeNode node) throws EmptyTreeException {
+        if(tree == null) throw new EmptyTreeException("The tree cannot be empty");
+
+        while(node.parent != null) {
+            node = node.parent;
+
+        }
+
+        return node == root;
+    }
+
+    public Position<E> find(E elem) {
+        if(isEmpty()) return null;
+        return find(root, elem);
+    }
+
+    private Position<E> find(Position<E> pos, E elem) {
+        Position<E> res = null;
+        if(pos.element().equals(elem)) return pos;
+        for(Position<E> w: children(pos)) {
+            res = find(w, elem);
+        }
+
+        return res;
+    }
+
+    public List<Position<E>> findAll(E elem) {
+        ArrayList<Position<E>> list = new ArrayList<>();
+        if(isEmpty()) return list;
+        findAll(root, elem, list);
+        return list;
+    }
+
+    private void findAll(Position<E> pos, E elem, List<Position<E>> list) {
+        if(pos.element().equals(elem)) {
+            for(Position<E> w: children(pos)) {
+                findAll(w, elem, list);
+            }
         }
     }
 
@@ -210,51 +287,6 @@ public class TreeLinked<E> implements Tree<E> {
             str += "  ";
         }
         return str + "-";
-    }
-
-    public boolean exists(E elem) {
-        if(isEmpty()) return false;
-        return exists(root, elem);
-    }
-
-    private boolean exists(Position<E> pos, E elem) {
-        boolean res = false;
-        if(pos.element().equals(elem)) return true;
-        for(Position<E> w: children(pos)) {
-            res = exists(w, elem);
-        }
-
-        return res;
-    }
-
-    public Position<E> find(E elem) {
-        if(isEmpty()) return null;
-        return find(root, elem);
-    }
-
-    private Position<E> find(Position<E> pos, E elem) {
-        Position<E> res = null;
-        if(pos.element().equals(elem)) return pos;
-        for(Position<E> w: children(pos)) {
-            res = find(w, elem);
-        }
-
-        return res;
-    }
-
-    public List<Position<E>> findAll(E elem) {
-        ArrayList<Position<E>> list = new ArrayList<>();
-        if(isEmpty()) return list;
-        findAll(root, elem, list);
-        return list;
-    }
-
-    private void findAll(Position<E> pos, E elem, List<Position<E>> list) {
-        if(pos.element().equals(elem)) {
-            for(Position<E> w: children(pos)) {
-                findAll(w, elem, list);
-            }
-        }
     }
 
     /**

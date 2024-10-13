@@ -50,8 +50,5 @@ public class TADTreeMain {
 
         System.out.println("Pre-order: " + myTree.toStringPreOrder());
         System.out.println("Post-order: " + myTree.toStringPosOrder());
-
-
-
     }
 }

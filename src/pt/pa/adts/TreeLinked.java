@@ -145,9 +145,10 @@ public class TreeLinked<E> implements Tree<E> {
 
             if(!belongs(this, treeNode)) throw new BoundaryViolationException("Tree node doesn't belong to this tree");
 
-            if (treeNode.children == null) {
+            if (treeNode.children.isEmpty()) {
                 throw new InvalidPositionException("The position is invalid");
             }
+
             return treeNode;
         } catch (ClassCastException e) {
             throw new InvalidPositionException();
